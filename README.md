@@ -43,13 +43,16 @@
 
 2. 透明网关
 + 初始化调用链, 生成jaeger Span Context
-  + jaeger:受Dapper和OpenZipkin启发的Jaeger是由Uber作为开源发布的分布式跟踪系统。它用于监视和诊断基于微服务的分布式系统
-   <img src="https://github.com/siyoo/devops/blob/master/images/jaeger.png" height="400px" width="400px" />
   + opentracing: OpenTracing 是一套标准，它通过提供平台无关、厂商无关的API，使得开发人员能够方便的添加（或更换）追踪系统的实现，标准中目前定义了两种类型的引用:
     + ChildOf: 可以理解为是继承关系
     + FollowsFrom: 顺序关系，并无继承行为
-  + Trace表示对一次请求完整调用链的跟踪(可能不止两个)，两个服务的请求/响应过程叫做一次Span
-  + 一个span一般会记录这个调用单元内部的一些信息，例如：
+  <img src="https://github.com/siyoo/devops/blob/master/images/jaeger.png" height="400px" width="800px" />
+
++ jaeger:受Dapper和OpenZipkin启发的Jaeger是由Uber作为开源发布的分布式跟踪系统。它用于监视和诊断基于微服务的分布式系统
+    + jaeger-client：jaeger 的客户端，实现了opentracing协议；
+    + jaeger-agent：jaeger client的一个代理程序，client将收集到的调用链数据发给agent，然后由agent发给collector；
+    + jaeger-collector：负责接收jaeger client或者jaeger agent上报上来的调用链数据，然后做一些校验，比如时间范围是否合法等，最终会经过内部的处理存储到后端存储；
+  + Trace表示对一次请求完整调用链的跟踪(可能不止两个)，两个服务的请求/响应过程叫做一次Span, 一个span一般会记录这个调用单元内部的一些信息，例如：
     + 日志信息
     + 标签信息
     + 开始/结束时间
