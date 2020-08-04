@@ -62,7 +62,7 @@
 
 ## CI/CD
 1. Jenkins file大体内容（groovy语言）
-  <img src="https://github.com/siyoo/devops/blob/master/images/jenkins.png" height="600px" width="400px" />
+  <img src="https://github.com/siyoo/devops/blob/master/images/jenkins.png" height="800px" width="400px" />
 
 2. k8s
    1. Kubernetes，是一种容器编排技术，它可以帮助用户省去应用容器化过程的许多手动部署和扩展操作
@@ -172,16 +172,16 @@
    3. Grafana 支持 Graphite，Elasticsearch，InfluxDB，Prometheus，Cloudwatch，MySQL，OpenTSDB等时序性数据库的展示
 
 ## 其他
-1. Gitops
+1. Gitops  
    GitOps这个术语是由Weaveworks的Alexis Richardson在一篇名为《Operation by Pull Request》的博文中创造的。其基本思想是通过向Git提交变更并使用Pull Request（以下简称PR）进行审批来管理Kubernetes上的资源
    * Jenkins X: 集成k8s的Jenkins (使用helm charts进行k8s集群的管理)
    * Argo CD:美观易用的gitops，详情见演示
 
 2. 网关 && 负载均衡
-   1. OpenResty: 利用 nginx 做服务器
+   1. OpenResty: 利用 nginx 做服务器  
       OpenResty 是一组扩展Nginx功能的模块，开发人员可以使用 Lua 脚本语言调动 Nginx 支持的各种 C 以及 Lua 模块
       详情见demo
-   2. Kong: Gateway + OpenResty
+   2. Kong: Gateway + OpenResty  
       集成了网关功能的OpenResty
 
 
