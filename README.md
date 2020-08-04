@@ -62,6 +62,20 @@
 
 ## CI/CD
 1. Jenkins file大体内容（groovy语言）
+  <img src="https://github.com/siyoo/devops/blob/master/images/jenkins.png" height="600px" width="400px" />
 
-2. 
+2. k8s deployment file大体内容
 
++ 一个Ingress - 描述如何流量应该如何从集群外部流入到集群内部的你的服务上
++ 一个Service -一个内部负载均衡器，用于将流量路由到内部的Pod上
++ 一个Deployment - Pod 和 ReplicaSet 之上，提供了一个声明式定义（declarative）方法，将 Pod 和 ReplicaSet 的实际状态改变到目标状态
+---
++ Ingress的 servicePort 应该匹配service的 port  
+Ingress的 serviceName 应该匹配服务的 name
+
++ 连接Deployment和Service  
+Service selector应至少与Pod的一个标签匹配  
+Service的targetPort应与Pod中容器的containerPort匹配  
+Service的port可以是任何数字。多个Service可以使用同一端口号，因为它们被分配了不同的IP地址
+---
++ k8s的其他组件
