@@ -152,8 +152,8 @@
       + docker 最开始使用linux container（LXC）进行资源的隔离
          + LXC在资源管理方面依赖于Linux内核的cgroups子系统，cgroups子系统是Linux内核提供的一个基于进程组的资源管理的框架，可以为特定的进程组限定可以使用的资源
          + 运行环境的隔离使用了NameSpace，namespace隔离包括进程树，网络，用户id，以及挂载的文件系统，主要方式是在对应的隔离项上加tag
-      + docker 后来移除了LXC，使用libcontainer
-         + libcontainer 为 golang 实现，封装了cgroups和namespace等，可以简单理解为golang实现的LXC
+      + docker 后来移除了LXC，使用libcontainer（后来改名runc）
+         + libcontainer 为 golang 实现，提供了虚拟化技术的api，可以简单理解为golang实现的LXC
    2. dockerfile 主要内容
       FROM: 原始镜像  
       剩下的基本类似于linux操作，比如拷贝代码，执行命令等
