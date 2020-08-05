@@ -99,7 +99,7 @@
 
         <img src="https://github.com/siyoo/devops/blob/master/images/cm.png" height="400px" width="400px" />
 
-        + Replication Controller简称RC,而本文是指Controller Manager中的Replication Controller，称为副本控制器。副本控制器的作用即保证集群中一个RC所关联的Pod副本数始终保持预设值
+        + Replication Controller简称RC,称为副本控制器。副本控制器的作用即保证集群中一个RC所关联的Pod副本数始终保持预设值
         + Node Controller通过API Server实时获取Node的相关信息，实现管理和监控集群中的各个Node节点的相关控制功能
         + ResourceQuota Controller 确保指定的资源对象在任何时候都不会超量占用系统物理资源  
           1）容器级别：对CPU和Memory进行限制  
