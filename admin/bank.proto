@@ -1,0 +1,213 @@
+syntax = "proto3";
+option go_package = "git.garena.com/shopee/loan-service/airpay_backend/airpay_counter/apc_refactory/apc_protobuf/protobuf3.pb/card/admin";
+
+package apc.card;
+
+service AdminService {
+    //获取银行卡列表
+    rpc GetCardList (GetCardListReq) returns (GetCardListResp);
+    //获取银行卡详情
+    rpc GetCardDetail (GetCardDetailReq) returns (GetCardDetailResp);
+    //获取银行卡交易记录
+    rpc GetCardTransactionRecords (GetCardTransactionRecordsReq) returns (GetCardTransactionRecordsResp);
+    //获取银行卡操作记录
+    rpc GetCardOperatorLog (GetCardOperatorLogReq) returns (GetCardOperatorLogResp);
+    //更新银行卡状态
+    rpc UpdateCardStatus (UpdateCardStatusReq) returns (UpdateCardStatusResp);
+    //导出银行卡交易记录
+    rpc DownloadCardTxnRecords(DownloadCardTxnRecordsReq) returns (DownloadCardTxnRecordsResp);
+    //查询银行列表
+    rpc GetBankList(GetBankListReq) returns (GetBankListResp);
+}
+message GetCardListReq {
+    string user_phone = 1; //用户手机号
+    string account_number = 2; //银行卡号or银行账号
+    uint64 card_id = 3; //银行卡ID
+    string user_id = 4; //用户ID
+    uint32 create_time_start = 5;   //时间到秒
+    uint32 create_time_end = 6;
+    uint32 update_time_start = 7;
+    uint32 update_time_end = 8;
+    uint32 page_size = 9;
+    uint32 page_no = 10;
+    uint32 link_type = 11;
+    uint32 bank_id = 12;
+    uint32 status = 13;
+    uint32 default_card_filter = 14;
+    string create_time_sort = 15;   //desc and asc
+    string update_time_sort = 16;
+    string ref = 17;
+    uint32 source_type = 18; //绑卡来源, 1:APC,2:IS
+}
+
+enum DefaultCardType {
+    dcNone = 0;
+    isDefault = 1;
+    notDefault = 2;
+    all = 3;
+}
+
+enum SourceType {
+    all_source = 0;
+    apc_source = 1;
+    is_source = 2;
+}
+
+message CardDetail {
+    uint64 card_id = 1; //银行卡ID
+    string user_phone = 2;
+    string user_id = 3;
+    uint32 link_type = 4;//绑卡时选择的绑定类型
+    string bank = 5;    //银行卡所属银行
+    string account_number = 6;  //银行卡号/银行卡账号
+    string account_name = 7;    //银行卡所属人姓名
+    string valid_from = 8;  //银行卡有效期起始时间
+    string valid_until = 9; //银行卡有效期终止时间
+    uint32 status = 10; //银行卡状态
+    bool default_card = 11;   //是否是默认卡
+    uint32 create_time = 12;    //银行卡创建时间
+    uint32 update_time = 13;    //银行卡更新时间
+    uint32 bank_id = 14;
+    string ref = 15;
+    uint32 source_type   = 16;   //绑卡来源，1：apc,2:IS
+}
+
+message GetCardListResp {
+    repeated CardDetail card_list = 1;
+    uint32 total = 2;
+}
+
+enum BankAccountType {
+    bat_None = 0;
+    Card = 1;   //Bank ATM card
+    Account = 2;    //Bank account
+    Unknown = 3;    //
+}
+
+enum BankAccountStatus {
+    BankAccountStatusPadding = 0; // 填充字段 无意义
+    Pending  = 1;       //pending
+    Verified = 2;       //已通过，绑定状态
+    Deleted  = 3;       //解绑状态
+    Banned   = 4;       //禁止状态
+    Failed   = 5;       //绑卡失败
+    INACTIVE = 6;       //未激活状态(由其它途径绑定并通过IS同步过来的，需要用户进行激活)
+}
+
+message GetCardDetailReq {
+    uint64 card_id = 1;  //银行卡id
+}
+
+message GetCardDetailResp {
+    string account_number = 1;
+    uint64 card_id = 2;
+    string user_id = 3;
+    string user_phone = 4;
+    uint64 total_txn_records = 5;//该银行卡相关的所有交易记录数量
+    uint32 link_type = 6;//绑卡时选择的绑定类型
+    string bank = 7;    //银行卡所属银行
+    string account_name = 8;    //银行卡所属人姓名
+    string valid_from = 9;  //银行卡有效期起始时间
+    string valid_until = 10; //银行卡有效期终止时间
+    uint32 status = 11; //银行卡状态
+    bool default_card = 12;   //是否是默认卡
+    string binding_platform = 13;   //首次绑定的端
+    uint32 create_time = 14;    //银行卡创建时间
+    uint32 update_time = 15;    //银行卡更新时间
+    uint32 source_type   = 16;   //绑卡来源，1：apc,2:IS
+    string ref = 17;  //ref id
+}
+
+message GetCardTransactionRecordsReq {
+    uint64 card_id = 1;  //银行卡id
+    uint32 page_size = 2;
+    uint32 page_no = 3;
+}
+
+message CardTransactionRecord {
+    string ref_id = 1;      //交易Ref ID
+    uint32 transaction_type = 2;    //交易类型
+    uint64 amount = 3;      //交易实付金额
+    uint32 status = 4;      //交易状态
+    uint32 create_time = 5;    //
+    uint32 update_time = 6;    //
+    int64 fee = 7;      //交易手续费
+    uint64 net_amount = 8;      //净值金额
+}
+
+message GetCardTransactionRecordsResp {
+    repeated CardTransactionRecord card_txn_record = 1;
+    uint32 total = 2;
+}
+
+message GetCardOperatorLogReq {
+    uint64 card_id = 1;  //银行卡id
+    uint32 page_size = 2;
+    uint32 page_no = 3;
+}
+
+message CardOperatorLog {
+    uint64 id = 1;  //Log序号
+    string operator = 2; //操作人
+    uint32 operation_time = 3;  //操作时间
+    string operation_remark = 4;    //操作内容
+}
+
+message GetCardOperatorLogResp {
+    repeated CardOperatorLog card_operator_log = 1;
+    uint32 total = 2;
+}
+
+message UpdateCardStatusReq {
+    uint64 card_id = 1;  //银行卡id
+    uint32 status = 2;  //状态
+}
+
+message UpdateCardStatusResp {
+
+}
+
+message DownloadCardTxnRecordsReq {
+    uint64 card_id = 1;
+}
+
+message DownloadCardTxnRecordsResp {
+    string taskId = 1; //任务ID
+}
+
+enum LinkType {
+    LtNone = 0;
+    Api = 1;
+    Website = 2;
+    BankCounter = 3;
+}
+
+enum BankType {
+    BtNone = 0;
+    ChooseLinkExpired = 1;  //可选linking type（bank card/bank account） 如果card模式,填expired date    1和2的主要区别
+    ChooseLinkIssue = 2; //可选linking type（bank card/bank account）   如果card模式,填issue date
+    CardAndIssue = 3;  //bank card+name+issue date绑定
+    AccountAndName = 4; //bank account+name绑定
+    CardOnly = 5;   //bank card绑定
+}
+
+//银行信息
+message BankInfo {
+    uint32 bank_id   = 1;   //银行的对应id
+    string bank_name = 2;   //银行名称
+    string logo_img  = 3;   //银行logo图
+    string bank_img  = 4;   //银行大图
+    uint32 link_type = 5;   //绑卡类型
+    uint32 bank_type = 6;   //银行卡类型(API型银行卡)
+    string bind_url = 7;    //跳转绑卡页面url
+}
+
+message GetBankListReq {
+    uint32 page_size = 1;
+    uint32 page_no = 2;
+}
+
+message GetBankListResp {
+    uint32 total = 1;//银行信息总数 这个字段不受offset和limit控制，主要用于翻页功能
+    repeated BankInfo bank_list = 2;//银行信息列表 根据offset和limit进行返回
+}
