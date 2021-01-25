@@ -1,0 +1,1025 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package apc.account;
+
+option go_package = "git.garena.com/shopee/loan-service/airpay_backend/airpay_counter/public/protobuf/protobuf3.pb/account";
+
+// XXX: 
+// 接口类别定义
+// APP：app客户端调用
+// BACKEND: 内部服务调用
+// ADMIN: admin调用
+// RN: RN调用
+
+service AccountService {
+  // ------
+  // 用户注册登录接口
+  // ------
+
+  // 请求sms
+  rpc GenerateSmsOPEN(SmsReq) returns (google.protobuf.Empty) {}
+  // 手机号登录
+  rpc SmsLoginOPEN(SmsLoginReq) returns (LoginResp) {}
+  // 用户名密码登录
+  rpc UsernameLoginOPEN(UsernameLoginReq) returns (LoginResp) {}
+  //登出
+  rpc Logout(LogoutReq) returns (LogoutResp){}
+  // 获取图片验证码  密码错误次数超过某个限制，后台会返回相应错误码，app决定调用这个接口
+  rpc GetCaptchaInfoOPEN(GetCaptchaInfoReq) returns (GetCaptchaInfoResp) {}
+
+  // 验证手机号，注册的时候调用  1 GenerateSmsOPEN -> 2 VerifyPhoneOPEN 3 SignupOPEN
+  rpc VerifyPhoneOPEN(SmsVerifyReq) returns(SmsVerifyResp) {}
+  // 手机号注册
+  rpc SignupOPEN(SignupReq) returns (LoginResp) {}
+
+  // 校验access token，gateway调用
+  rpc ValidateAccessToken(ValidateAccessTokenReq)
+      returns (ValidateAccessTokenResp) {}
+  // 刷新token
+  rpc RefreshTokenOPEN(RefreshTokenReq) returns (RefreshTokenResp) {}
+
+  // 获取用户信息
+  rpc GetUserInfo(UserInfoReq) returns(UserInfoResp) {}
+  // 通过其他字段获取用户信息
+  rpc GetUserInfoBy(UserInfoByReq) returns(UserInfoByResp) {}
+
+  // 获取SPM token
+  rpc GetSPMToken(GetSPMTokenReq) returns(GetSPMTokenResp) {}
+  // [RN]获取SPM token
+  rpc GetSPMTokenJSON(GetSPMTokenJSONReq) returns(GetSPMTokenJSONResp) {}
+
+
+
+  // 【ADMIN】查询用户ADMIN接口
+  rpc SearchUserProfile(SearchUserProfileReq)
+      returns (SearchUserProfileResp) {}
+
+
+  // ------
+  // 用户个人kyc接口
+  // ------
+
+  //校验kyc
+  rpc QueryValidKycUsers(QueryValidKycUsersReq) returns (QueryValidKycUsersResp) {}
+  rpc VerifyKyc(VerifyKycReq) returns (VerifyKycResp) {}
+  // 获取用户kyc状态
+  rpc GetUserKycStatus(UserInfoReq) returns (UserKycResp) {}
+  // 获取用户kyc详情信息
+  rpc GetUserKycInfo(UserInfoReq) returns (UserKycInfoResp) {}
+  // 用户提交kyc信息
+  rpc SubmitUserKycInfo(UserKycInfoReq) returns (UserKycResp) {}
+  // 用户身份证号码是否已经存在
+  rpc IDCardNumberExist(IDCardNumberExistReq)
+      returns(IDCardNumberExistResp) {}
+
+  // 【APP】用户提交KYC信息接口版本V2
+  rpc SubmitUserKycInfoV2(SubmitUserKycInfoV2Req) returns (SubmitUserKycInfoV2Resp) {}
+  // 【APP】补充用户KYC信息
+  rpc SubmitExtraUserKycInfo(SubmitExtraUserKycInfoReq) returns (SubmitExtraUserKycInfoResp) {}
+
+  // 发送OTP
+  rpc SendOTP(SendOTPReq) returns(SendOTPResp){}
+  // 校验OTP
+  rpc VerifyOTP(VerifyOTPReq) returns(VerifyOTPResp){}
+
+  // 修改交易密码
+  rpc ChangePaymentPasscode(ChangePaymentPasscodeReq) returns(ChangePaymentPasscodeResp){}
+  // 忘记支付密码后重设交易密码
+  rpc ResetPaymentPasscode(ResetPaymentPasscodeReq) returns(ResetPaymentPasscodeResp){}
+  // 校验交易密码
+  rpc VerifyPaymentPasscode(VerifyPaymentPasscodeReq) returns(VerifyPaymentPasscodeResp){}
+
+
+  // ------
+  // Staff接口
+  // ------
+  // 拉取Staff列表
+  rpc GetStaffList(GetStaffListReq) returns (GetStaffListResp) {} // 按添加的时间排序和状态排序，正常状态的排上方，locked状态的排下方
+  // 添加修改Staff个人信息
+  rpc SetStaffInfo(SetStaffInfoReq) returns (SetStaffInfoResp) {} // 校验
+  // 修改Staff的状态
+  rpc SetStaffStatus(SetStaffStatusReq) returns (SetStaffStatusResp) {}
+  // Staff登录
+  rpc StaffLoginOPEN(StaffLoginReq) returns (StaffLoginResp) {} // 当返回kErrorAccountStaffLoginNeedOTP时, 错误处理与UsernameLoginOPEN的kErrorAccountPwdNeedOTP雷同, login_token会放到StaffLoginResp的access_token字段
+
+  rpc SendStaffLoginOTPOPEN(SendStaffLoginOTPReq) returns (SendStaffLoginOTPResp) {}
+
+  rpc VerifyStaffLoginOTPOPEN(VerifyStaffLoginOTPReq) returns (StaffLoginResp) {}
+
+
+  // --------------------- ADMIN 接口 ---------------------
+  // XXX: ADMIN后台接口
+  // 【ADMIN】【deprecated】更新用户kyc状态
+  rpc UpdateUserKycStatus(UpdateUserKycStatusReq) returns (UserKycResp) {}
+
+  // 根据uid或者流水id查找申请kyc审核列表
+  rpc SearchUserKycAuditList(SearchUserKycAuditReq)
+      returns (SearchUserKycAuditResp) {}
+  // 更新用户kyc审核状态
+  rpc UpdateUserKycAuditStatus(UpdateUserKycAuditStatusReq)
+      returns (google.protobuf.Empty) {}
+  // 获取用户审核流水日志
+  rpc GetUserKycAuditLogList(UserKycAuditLogListReq)
+      returns (UserKycAuditLogListResp) {}
+  // 手动同步KYC到shopeepay
+  rpc SyncKycToShopeepay(SyncKycToShopeepayReq) returns (SyncKycToShopeepayResp) {}
+
+  // 获取用户审核流水日志
+  rpc GetShopeepaySyncLogList(GetShopeepaySyncLogListReq) returns (GetShopeepaySyncLogListResp) {}
+  //获取用户kyc信息
+  rpc QueryUserKycInfo(QueryUserKycInfoReq)
+      returns (UserKycInfoResp){}
+
+  // 【ADMIN】创建KYC case
+  rpc CreateKYCAudit(CreateKYCAuditReq) returns(CreateKYCAuditResp) {}
+  //【ADMIN】申请拒绝
+  rpc RejectKYCAudit(RejectKYCAuditReq) returns(RejectKYCAuditResp) {}
+  //【ADMIN】申请成功
+  rpc ApproveKYCAudit(ApproveKYCAuditReq) returns(ApproveKYCAuditResp) {}
+  //【ADMIN】remark kyc
+  rpc RemarkKYCAudit(RemarkKYCAuditReq) returns(RemarkKYCAuditResp) {}
+
+  // [ADMIN]实时获取工作人员今天的审批工作数据
+  rpc GetKYCAuditOverview(GetKYCAuditOverviewReq) returns (GetKYCAuditOverviewResp) {}
+
+  // [ADMIN]请求系统自动分派单子
+  rpc AutoAssignKYCAudit(AutoAssignKYCAuditReq) returns (AutoAssignKYCAuditResp) {} // 由Init 变成 In Review，系统自动派单默认为Create Case，需要记录一条Create Case同样的Log
+
+  //获取用户支付密码变更记录
+  rpc GetPaymentPasswdAuditLog(PaymentPasswdAuditLogReq)
+      returns (PaymentPasswdAuditLogResp){}
+
+  // 导出KYC Audit report
+  rpc ExportKYCAuditReport(ExportKYCAuditReportReq) returns(ExportKYCAuditReportResp) {}
+
+  //【BACKEND】获取用户基本信息：用户ID、shopee ID，不返回手机号、用户名等
+  rpc GetUserBasicInfo(GetUserBasicInfoReq)
+  returns (GetUserBasicInfoResp){}
+
+  // [BACKEND] 获取UserKycInfo 全集
+  rpc GetAllUserKycInfo(GetAllUserKycInfoReq) returns (GetAllUserKycInfoResp) {}
+
+  rpc GetAllUser(GetAllUserReq) returns (GetAllUserResp) {}
+
+
+  // --------------------- FOMS 接口 ---------------------
+  rpc FomsGetUserInfo(FomsUserInfoReq) returns(FomsUserInfoResp) {}
+
+  //校验uid是否有效
+  rpc ValidUid(ValidUidReq) returns (ValidUidRes){}
+}
+
+//XXX: COPY from airpay_gateway
+// message GrpcJsonReq {
+//   bytes content = 1; //可以是urldecode之后的json字符串
+//   // header = 2; //看看python的公共头   todo
+// }
+//
+// message GrpcJsonRsp {
+//   bytes content = 1; //可以是json字符串
+// }
+
+message GetSPMTokenJSONReq {
+  bytes content = 1;
+}
+
+message GetSPMTokenJSONResp {
+  bytes content = 1;
+}
+
+// 获取SPM token请求
+message GetSPMTokenReq {
+
+}
+
+// 获取SPM token响应
+message GetSPMTokenResp {
+  string spm_token = 1;   // spm_token
+  uint64 expiry = 2;      // 过期时间戳，秒单位
+}
+
+// 账号服务业务错误码定义
+enum ErrorCode {
+    kSucess = 0;
+    kErrorAccountNotExist = 50001;  // 账号不存在
+    kErrorAccountPassword = 50002;  // 用户名密码不匹配
+    kErrorAccountNotVerifyPhone = 50003;  // 未绑定手机号
+    kErrorAccountOtpNotMatch = 50004; // 手机号验证码登录不匹配
+    kErrorAccountVerifyCode = 50005;  // 注册校验手机号验证码不匹配
+    kErrorAccountUserNameExist = 50006; // 用户名已经被注册
+    kErrorAccountLoginRateLimit = 50007; // 用户登录太频繁，需要获取图片验证码
+    kErrorAccountBindPhoneInvalid = 50008;// 用户绑定的手机号不匹配国家
+    kErrorAccountBanned = 50009;  // 账号被禁
+    kErrorAccountCaptchaVerificationFailed = 50010; // 图片验证码错误
+    kErrorAccountTokenInvalid = 50011;  // 非法refresh token
+    kErrorAccountKYCIdCardNoExist = 50012; // 输入的idcardno号码已经被使用
+    kErrorAccountOperationNotAllow = 50013; // 不允许的操作
+    kErrorAccountPhoneNumberExist = 50014;  // 手机号已经被注册
+    kErrorAccountPhoneNumberNotRegister = 50015; // 手机号未注册，尝试使用未注册的手机号登录会返回这个错误
+    kErrorAccountNotFound = 50016;  // admin后台查找用户未找到
+    kErrorAccountInvalidPaymentPasswd = 50017;  //支付密码校验失败
+    kErrorAccountInvalidOTPCode = 50018;  // 短信验证码校验失败
+    kErrorAccountVerifyKycFailed = 50019;  // kyc信息校验失败
+    kErrorAccountWalletBanned = 50020;//钱包状态被禁用
+    kErrorAccountWalletFrozen = 50021;//钱包状态被冻结  24小时内连续输入5次错误支付密码
+    kErrorAccountWalletDeleted = 50022;//钱包状态被注销  （暂时无此状态）
+    kErrorAccountWalletLock = 50023;//钱包状态被锁定（半小时连续输错3次错误支付密码）
+    kErrorAccountKycInReview = 50024;//kyc状态在review中
+    kErrorAccountKycApproved = 50025;//kyc状态审批通过  正常返回码，一般不做出错处理
+    kErrorAccountKycRejected = 50026;//kyc状态审批被拒绝
+    kErrorAccountKycDeleted = 50027;//kyc被删除 当前业务场景下不会出现
+    kErrorAccountUserLogout = 50028;//用户登出
+    kErrorAccountUserReLogin = 50029; //帐户在其他设备登陆
+    kErrorAccountNeedVoiceOTP = 50030;//需要语音验证码，适用于手机号在黑名单的情况下
+    kErrorAccountPwdNeedOTP = 50031;//用户密码验证错误使用OTP验证。
+    kErrorAccountNeedLoginWithUserNameAndPwd = 50032; // 需要用账户名和密码登录
+
+    // staff
+    kErrorAccountStaffNumOver = 50051; // 添加的staff数量超过限制
+    kErrorAccountMitraUsernameChanged = 50052; // 提交的shopee的username不是最新的
+    kErrorAccountStaffLoginUsernameExist = 50053; // 提交的Staff LoginUsername已存在
+    kErrorAccountStaffLoginUsernameNotExist = 50054; // 提交的Staff LoginUsername不存在
+    kErrorAccountStaffLoginPasswordInvalid = 50055; // staff 登录密码错误
+    kErrorAccountStaffAccountLock = 50056; // staff账户被锁,不能登录
+    kErrorAccountRetailerBindPhoneInvalid = 50057; // 老板账号未绑定手机号
+    kErrorAccountStaffLoginNeedOTP = 50058; // 新设备登录需要OTP
+    kErrorAccountStaffVerificationExpired = 50059; // staff校验账密缓存失败
+    kErrorAccountStaffLogoutByLoginPasswordChanged = 50060; // stff登录密码被改
+    kErrorAccountStaffLogoutByLocked = 50061; // staff account被锁,登录被踢
+    kErrorAccountStaffLogoutByDeleted = 50062; // staff account被deleted,登录被踢
+    kErrorAccountStaffReLogin = 50063; // staff多端登录
+
+    kErrorAccountParamInvalid      = 51001; // 参数不合法
+    kErrorAccountKYCNotExist       = 51002; // kyc记录不存在
+    kErrorAccountSystemError       = 51003; // 系统错误
+    kErrorAccountKYCAuditNotExist  = 51004; // kyc审核记录不存在
+    kErrorAccountKYCOperationIllegal  = 51005; // kyc操作不合法
+}
+
+
+// 短信请求类型
+enum SmsType {
+  SMS_TYPE_UNKNOWN = 0; // 未知
+  SMS_TYPE_SIGNUP = 1;  // 注册类型
+  SMS_TYPE_LOGIN = 2;   // 登录类型
+}
+
+enum OperaotrType{
+  UNKOWN_OPERATOR = 0;
+  USER = 1;
+  ADMIN_OPERATOR = 2;
+}
+
+// 验证手机号请求
+message SmsVerifyReq {
+	string phone_number = 1; // 手机号
+	string verify_code = 2; // 短信验证码
+	int32 sms_type = 3; // 见SmsType
+}
+
+message SmsVerifyResp {
+  bool ok = 1; // 验证手机号和验证码是否匹配
+}
+
+// 短信请求
+message SmsReq {
+  string phone_number = 1; // 手机号
+  int32 sms_type = 2;      // 见SmsType
+  bool is_resend = 3;      // 当前请求是否是重发的请求
+  bool is_voice_otp = 4;   // 是否是语音验证码
+  string m_token = 5;
+}
+
+message SmsLoginReq {
+  string phone_number = 1; // 手机号
+  string verify_code = 2;  // 短信验证码
+  int32 sms_type = 3;      // 见SmsType
+  string device_fingerprint = 4; // 设备码，见https://confluence.shopee.io/display/SPAT/Device+Finger+Print+Generation
+  string captcha_key = 5;        // XXX: [这里废弃了]验证码key
+  string captcha = 6;            // XXX: [这里废弃了]验证码，如果有
+  uint32 login_type = 7;         // 见LoginType定义
+  string username = 8;           // 根据login_type作不同解析
+}
+
+message LoginResp {
+  string access_token = 1;  // access token
+  string refresh_token = 2; // refresh token
+  uint64 access_token_expire_time = 3; // access token 过期时间戳，秒
+  uint64 refresh_token_expire_time = 4; // refresh token 过期时间戳，秒
+  uint64 uid = 5;           // uid
+  string platform_uid = 6;  // 平台uid（shopee uid）
+  string modify_phone_url = 7; // 修改手机号的url, 默认为空，不为空说明需要修改手机号
+}
+
+// 账号类型
+enum LoginType {
+  LOGIN_TYPE_UNKNOWN = 0;  // 未知
+  LOGIN_TYPE_USERNAME = 1; // 用户名
+  LOGIN_TYPE_EMAIL = 2;    // email
+  LOGIN_TYPE_PHONE = 3;    // 手机号
+}
+
+message UsernameLoginReq {
+  uint32 login_type = 1;         // 见LoginType定义
+  string username = 2;           // 根据login_type作不同解析
+  string password_hash = 3;      // the hashed user password (md5 then sha256)
+  string captcha_key = 4;        // 验证码key
+  string captcha = 5;            // 验证码，如果有
+  string device_fingerprint = 6; // 见前面定义
+}
+
+message LogoutReq {
+
+}
+message LogoutResp {
+
+}
+
+message SignupReq {
+  string username = 1;           // 用户名
+  string password_hash = 2;      //
+  string phone_number = 3;       // 手机号
+  string verify_code = 4;        // 手机验证码
+  int32 sms_type = 5;            // 见SmsType
+  string device_fingerprint = 6; // 同上定义
+}
+
+message GetCaptchaInfoReq {
+  string device_fingerprint = 1; // 同上定义
+}
+
+message GetCaptchaInfoResp {
+  string captcha_url = 1; // 验证码url
+  string captcha_key = 2; // 验证码key，需要回填
+}
+
+message UserInfoReq {
+    uint32 app_kyc_version = 1;// app的KYC版本号
+}
+
+message UserInfoResp {
+  uint64 uid = 1;
+  string platform_uid =2 ;
+  string platform_username = 3;
+  string phone_number = 4;
+  string email = 5;
+  string country = 6;
+  uint32 user_type = 7; // 1-老板; 2-员工
+  StaffInfo staff_info = 8; // 2-员工,读取改信息
+}
+
+message QueryUserKycInfoReq{
+  uint64 uid = 1;
+}
+
+message UserInfo {
+  uint64 uid = 1;
+  string platform_uid =2 ;
+  string platform_username = 3;
+  string phone = 4;
+  string email = 5;
+  string country = 6;
+  uint32 user_type = 7;
+}
+
+message UserInfoByReq {
+  UserInfo userinfo = 1;//仅有一个字段生效。按顺序检查。
+}
+
+message UserInfoByResp {
+  UserInfo userinfo = 1;
+}
+
+
+message RefreshTokenReq {
+  string refresh_token = 1; // refresh token
+}
+
+message RefreshTokenResp {
+  string access_token = 1; // access token
+  uint64 access_token_expire_time = 3; // access token 过期时间戳，秒
+  string refresh_token = 4; // 新的refresh token 不为空证明需要替换掉
+}
+
+message ValidateAccessTokenReq {
+  string access_token = 1; // access token
+}
+
+message ValidateAccessTokenResp {
+  uint64 expire_time = 1; // 过期时间
+  uint64 uid = 2; // uid
+  uint64 staff_uid = 3;
+}
+
+// 用户kyc状态
+enum UserKycStatus {
+  USER_KYC_NO_KYC = 0;    // 未提交
+  USER_KYC_IN_REVIEW = 1; // 审核中
+  USER_KYC_APPROVED = 2;  // 通过
+  USER_KYC_REJECTED = 3;  // 拒绝
+  USER_KYC_DELETED = 4;   // 删除
+}
+
+// 用户提交kyc信息请求
+message UserKycInfoReq {
+  string name = 1;       // 名字
+  string id_card_no = 2; // 身份证号码
+  int64 birthday = 3;   // XXX: 出生日期，unix时间戳，单位为秒
+  string user_image_path = 4;         // 用户手持身份证图片路径
+  string user_id_card_image_path = 5; // 用户身份证图片路径
+  string txn_code = 6;                // 用户交易密码
+  uint64 uid = 7; // uid
+}
+
+// 和UserKycStatus保持一致
+message NewUserKYCStatus {
+  enum Status {
+    NO_KYC = 0; // 未提交
+    IN_REVIEW = 1; // 审核中
+    APPROVED = 2;  // 通过
+    REJECTED = 3;  // 拒绝
+    DELETED = 4;   // 删除
+  }
+}
+
+// 用户kyc响应
+message UserKycResp {
+  UserKycStatus status = 1; // 个人kyc状态
+  string button_hint = 2;   // 按钮提示文案
+  string status_hint = 3; // 详情页文案，只有IN_REVIEW和REJECTED才有内容
+  uint32 new_kyc_status = 4; // new kyc status 见NewUserKYCStatus
+  uint32 upgrade_status = 5;// 枚举值参考KycUpgradeStatus
+}
+
+// 用户kyc信息响应
+message UserKycInfoResp {
+  string name = 1;       // 名字
+  string id_card_no = 2; // 身份证号码
+  int64 birthday = 3;   // XXX: 出生日期，unix时间戳，单位为秒
+  string user_image_path = 4;         // 用户手持身份证图片路径
+  string user_id_card_image_path = 5; // 用户身份证图片路径
+  uint64 uid = 6;
+  int32 status = 7;
+
+  ExtraKycInfo extra_kyc = 8;
+  uint32 new_kyc_status = 9;  // 见 NewUserKYCStatus
+  uint32 user_kyc_version = 10;
+  uint32 shopee_kyc_status = 11; // 见 UserKycStatus
+//  uint32 shopeepay_sync_status = 11;// 1-suc; 2-fail
+//  string shopeepay_sync_errmsg = 12;
+//  uint32 shopeepay_sync_retry_times = 13;// 重复次数
+
+}
+
+//
+message IDCardNumberExistReq {
+  string id_card_no = 1; // 身份证号码
+}
+
+//
+message IDCardNumberExistResp {
+  bool is_exist = 1;  // 身份证号码已经是否存在
+}
+
+message UpdateUserKycAuditStatusReq {
+  uint64 flow_id = 1;
+  uint32 audit_status = 2;
+  string operation_remark = 3;
+  string operation_name = 5;// 操作员名字
+}
+
+message CreateKYCAuditReq {
+  uint64 flow_id = 1;
+}
+
+message CreateKYCAuditResp {}
+
+message RejectKYCAuditReq {
+  uint64 flow_id = 1;
+  string rejected_reason = 2;
+}
+
+message RejectKYCAuditResp {}
+
+message ApproveKYCAuditReq {
+  uint64 flow_id = 1;
+}
+
+message ApproveKYCAuditResp {}
+
+message RemarkKYCAuditReq {
+  uint64 flow_id = 1;
+  string remark = 2;
+}
+
+message RemarkKYCAuditResp {}
+
+
+message PaymentPasswdAuditLogReq{
+    uint64 user_id = 1;
+    uint32 offset = 2;
+    uint32 limit = 3;
+}
+
+message PaymentPasswdAudit {
+    enum AuditType {
+        WalletPinAuditType = 0;
+        CHANGE_WALLET_PIN = 1; //User changed wallet PIN
+        FREEZE_WALLET_PIN = 2;	//Wallet PIN is temporarily frozen
+        FORGET_WALLET_PIN = 3;	//User reset wallet pin
+        CREATE_WALLET_PIN = 4;	//User setup wallet PIN for the first time
+        INFO_UPDATE = 5;	//General updates to user info
+    }
+    uint64 audit_id = 1;
+    uint64 user_id = 2;
+    int32  audit_type = 3;
+    string changes = 4;
+    uint32 audit_time = 5;
+}
+
+message PaymentPasswdAuditLogResp{
+    uint64  user_id = 1;
+    uint32  total = 2; //记录总数
+    repeated PaymentPasswdAudit  log_list = 3;// 此次请求拉取到的数据
+}
+
+message UserKycAuditLogListReq {
+  uint64 flow_id = 1; // 流水id
+}
+
+
+message UserKycAuditLogListResp {
+  message UserKycAuditLogRecord {
+    uint64 flow_id = 1;
+    string operation_id = 2;
+    string operation_name = 3;
+    uint64 operation_time = 4;
+    uint32 audit_status = 5;
+    string operation_remark = 6;
+  }
+  repeated UserKycAuditLogRecord record_list = 1; // 列表
+}
+
+// 用户kyc审核记录状态定义
+enum UserKycAuditStatus {
+  USER_AUDIT_STATUS_INIT = 0; //初始化
+  USER_AUDIT_STATUS_IN_REVIEW = 1; // 待审核
+  USER_AUDIT_STATUS_APPROVED = 2; // 同意
+  USER_AUDIT_STATUS_REJECTED = 3; // 被拒绝
+
+}
+
+// 用户kyc审核记录状态定义
+enum ShopeePaySyncStatus {
+    SHOPEE_PAY_SYNC_STATUS_UNKNOWN = 0; //
+    SHOPEE_PAY_SYNC_STATUS_SUCCESS = 1; // succ
+    SHOPEE_PAY_SYNC_STATUS_FAILED = 2; // failed
+
+}
+
+message SearchUserKycAuditReq {
+  int32 search_type = 1; // deprecated 查找类型，0按用户id；1按case id
+  uint64 search_id = 2;  // deprecated uid或者
+  uint32 pageSize = 3;
+  uint32 pageNo = 4;
+  repeated  uint32 audit_status = 5;//UserKycStatus  且关系
+  string user_name = 6;
+  string phone = 7;
+  string real_name = 8;
+  string id_card_no = 9; // 身份证号码
+  uint32 apply_time_since = 10;
+  uint32 apply_time_until = 11;
+  uint32 order_by_apply_time = 12;//2-asc 1-desc
+  bool need_audit_status_count = 13;
+  uint64 uid = 14;
+  uint64 flow_id = 15;      // 流水id/case_id
+  bool need_encrypt = 16; //默认不需要
+  uint32 case_type = 17; // 见SearchUserKycAuditResp_CaseType
+  uint32 kyc_version = 18; // kyc 版本,0: all, 其他的数字代替,暂时后端限制最大为3
+  uint32 shopeepay_sync_status = 19; // shopee 同步状态, 见 ShopeePaySyncStatus
+}
+
+message SearchUserKycAuditResp {
+  enum CaseType {
+    kUnknown = 0;
+    kOld = 1;
+    kAppend = 2;
+    kNew = 3;
+  }
+  message UserKycAuditRecord {
+    uint64 uid = 1;          // uid
+    uint64 flow_id = 2;      // 流水id
+    uint64 apply_time = 3;   // 申请状态
+    uint32 audit_status = 4; // 审核状态
+    string name = 5;       // real name
+    string id_card_no = 6; // 身份证号码
+    int64 birthday = 7;   // XXX: 出生日期，unix时间戳，单位为秒
+    string user_image_path = 8;         // 用户手持身份证图片路径
+    string user_id_card_image_path = 9; // 用户身份证图片路径
+    string user_name = 10;
+    string phone = 11;
+
+    uint32 case_type = 12;  // 见CaseType
+    ExtraKycInfo extra_kyc = 13;
+    // V3新字段
+    uint32 user_kyc_version = 14;
+    uint32 shopeepay_sync_status = 15;// 1-suc; 2-fail
+    string shopeepay_sync_errmsg = 16;
+    uint32 shopeepay_sync_retry_times = 17;// 重复次数
+    uint64 shopee_uid = 18;
+  }
+  repeated UserKycAuditRecord record_list = 1; // 列表
+  uint64 totalSize = 2;// 总记录数
+  map<int32,uint32> audit_status_count = 3;  //-1:all
+}
+
+message UpdateUserKycStatusReq {
+  uint64 uid = 1;           // uid
+  UserKycStatus status = 2; // 用户个人kyc状态，见UserKycStatus
+}
+
+message SearchUserProfileReq {
+  enum SearchType {
+    kUnknown = 0;
+    kSearchPhone = 1;
+    kSearchUserName = 2;
+    kSearchEmail = 3;
+    kSearchMitraUID = 4;
+    kSearchShopeeUID = 5;
+  }
+  int32 search_type = 1; // 查找类型, SearchType
+  string search_content = 2; // 查找内容，根据查找类型作不同解释
+}
+
+// mitra 用户状态，暂时和shopee账号保持一致
+enum UserAccountStatus {
+  kDeleted = 0;
+  kNormal = 1;
+  kBanned = 2;
+  kFrozen = 3;
+}
+
+message SearchUserProfileResp {
+  uint64 uid = 1; // mitra uid
+  string id_card_no = 2; // kyc citizen id
+  string email = 3; // email
+  string phone_number = 4;  // phone
+  string name = 5;  // kyc name
+  int64 balance = 6;  // 钱包余额
+  int64 register_time = 7;
+  string register_ip = 8;
+  int64 last_login_time = 9;
+  string last_login_ip = 10;
+  string last_login_device = 11;
+
+  string login_device = 12;
+  uint64 daily_transaction_limit = 13;
+  bool kyc_verified = 14;
+  uint64 ewallet_cash_balance = 15;
+  int32 status = 16;  // 账号状态，见UserAccountStatus
+  string platform_uid = 17; // 平台uid
+  string platform_username = 18;  //shopee username
+}
+
+// 
+enum OTPActionType {
+  kUnknown = 0;
+  kResetPaymentPasscode = 1;  // 设置交易密码
+}
+
+
+message QueryValidKycUsersReq{
+  repeated uint64 uids = 1; // mitra uid
+}
+
+message QueryValidKycUsersResp{
+  repeated uint64 valid_uids = 1; // mitra uid
+}
+
+//验证kyc请求包体
+message VerifyKycReq {
+  string id_card_no = 1;  // 身份证号码
+  int64 birthday = 2; // XXX: KYC出生日期，unix时间戳，单位为秒
+}
+
+//验证kyc应答包体
+message VerifyKycResp {
+}
+
+
+//发起OTP（短信验证码）请求包体
+message SendOTPReq {
+  bool is_voice_otp = 1;
+}
+
+//OTP（短信验证码）应答包体
+message SendOTPResp {
+}
+
+//校验用户输入的验证码包体，返回码在包头中返回
+message VerifyOTPReq {
+  string otp_code = 1;//用户输入的验证码
+}
+
+message VerifyOTPResp {
+}
+
+message ChangePaymentPasscodeReq {
+  string new_payment_passcode = 1;  // 新支付密码(md5 then sha256)
+  string old_payment_passcode = 2;  // 旧支付密码(md5 then sha256)
+}
+
+//修改用户支付密码应答包体，返回码在包头中返回
+message ChangePaymentPasscodeResp {
+
+}
+//重置密码请求包体
+message ResetPaymentPasscodeReq {
+  string otp_code = 1;
+  string new_payment_passcode = 2;  // 新支付密码(md5 then sha256)
+  string id_card_no = 3;  // 身份证号码
+  int64 birthday = 4; // XXX: KYC出生日期，unix时间戳，单位为秒
+}
+
+//重置密码请求包体
+message ResetPaymentPasscodeResp {
+}
+
+
+//校验支付密码请求包体
+message VerifyPaymentPasscodeReq {
+  string payment_passcode = 1;  // 支付密码(md5 then sha256)
+}
+//校验支付密码应答包体
+message VerifyPaymentPasscodeResp {
+
+}
+
+message GetUserBasicInfoReq {
+  string shopeeUid = 1;
+  uint64 uid = 2;// mitra uid
+}
+
+message GetUserBasicInfoResp {
+  string shopeeUid = 1;
+  uint64 uid = 2;// mitra uid
+  int32 status = 3;
+  string country = 4;
+  int64 register_time = 5;
+  string register_ip = 6;
+}
+
+message ExtraKycInfo {
+  enum Gender {
+    kUnKnown = 0;
+    kMale = 1;
+    kFemale = 2;
+  }
+  // extra personal info
+  string birthplace = 1;
+  uint32 gender = 2; // 见Gender
+  string profession = 3;
+  string nationality = 4; // 国籍
+  string country_code = 5; // 国家代码，2位字母
+  string province = 6;
+  string city = 7;
+  string district = 8;
+  uint32 postal_code = 9;
+  string detailed_address = 10;
+
+  // store info
+  string store_name = 11;
+  string store_province = 12;
+  string store_city = 13;
+  string store_district = 14;
+  uint32 store_postal_code = 15;
+  string store_detailed_address = 16;
+
+  // bank info
+  string bank_name = 17;
+  string bank_branch = 18;
+  string bank_account_no = 19;
+  string bank_account_holder = 20;
+  string bank_passbook_first_page_image = 21;
+  string bank_authority_letter_image = 22;
+
+  // V3新字段
+  uint32 card_type = 24;// 参考枚举CardType
+  uint32 extra_card_image_type = 25;// 参考枚举CardType
+  string extra_card_image_path = 26;
+  string mother_maiden_name = 27;
+  uint32 profession_code = 28;
+}
+
+message SubmitUserKycInfoV2Req {
+  UserKycInfoReq base_kyc = 1;
+  ExtraKycInfo extra_kyc = 2;
+  uint32 app_kyc_version = 3;// app当前的KYC版本,参考枚举KycVersion
+}
+
+message SubmitUserKycInfoV2Resp {
+  UserKycResp base_resp = 1;
+}
+
+
+message SubmitExtraUserKycInfoReq {
+  ExtraKycInfo extra_kyc = 1;
+  uint32 app_kyc_version = 2;// app当前的KYC版本,参考枚举KycVersion
+}
+
+message SubmitExtraUserKycInfoResp {
+  UserKycResp base_resp = 1;
+}
+
+message ExportKYCAuditReportReq {
+  message TimeFilter{
+    uint32 since = 1; //time start 开区间
+    uint32 until = 2; //time end 闭区间
+  }
+  TimeFilter apply_time = 1; // 申请时间
+  repeated uint32 audit_status = 2; // 见UserKycAuditStatus，如果不填则过滤所有状态的
+  TimeFilter review_time = 3; // kyc case review time
+}
+
+message ExportKYCAuditReportResp {
+
+}
+
+message GetKYCAuditOverviewReq { // operator 隐含在header头部
+}
+
+message GetKYCAuditOverviewResp {
+    uint32 today_operator_audited_count = 1; // 今天已经审核单数量
+    uint32 total_remaining_init_case_count = 2;
+}
+
+message AutoAssignKYCAuditReq {  // operator 隐含在header头部
+    bool need_encrypt = 1; //默认不需要
+}
+
+message AutoAssignKYCAuditResp {
+    SearchUserKycAuditResp.UserKycAuditRecord record = 1;
+    bool has_audit_record = 2; // false-没有记录 true-有记录
+}
+
+message FomsUserInfoReq {
+  string username = 1;
+}
+
+message FomsUserInfoResp {
+  uint64 mitra_user_id = 1;
+  uint64 shopee_user_id = 2;
+  uint32 is_mitra = 3;
+  int32 account_status = 4;
+  UserKycStatus kyc_status = 5;
+}
+
+message GetAllUserKycInfoReq {
+}
+
+message GetAllUserKycInfoResp {
+    repeated UserKycInfo user_kyc_info_list = 1;
+}
+
+message UserKycInfo {
+  uint64 uid = 1;    // uid
+  uint32 status = 2; // 用户个人kyc状态，见UserKycStatus
+  uint32 new_kyc_status = 3;  // 见 NewUserKYCStatus
+}
+
+message GetAllUserReq {
+    uint32 page_no = 1;
+    uint32 page_size = 2;
+}
+
+message GetAllUserResp {
+    repeated uint64 uid_list = 1; // 兼容老逻辑
+    repeated UserInfo user_info_list = 2;
+    uint32 count = 3; // 此次返回的数量
+}
+
+message GetStaffListReq {
+}
+
+message GetStaffListResp {
+    repeated StaffInfo staff_info_list = 1;
+    uint32 staff_num_limit = 2;
+}
+
+message StaffInfo {
+     uint64 staff_uid = 1; // staff uid
+     string staff_nickname = 2; //可以多次编辑
+     string staff_login_username = 3;
+     uint32 staff_status = 4; // 参考StaffStatus 只针对admin backend可修改
+     string staff_login_passcode = 5;  // 登录密码(md5 then sha256) 可以多次编辑
+     uint64 retailer_uid = 6; // 只针对admin backend
+     uint64 retailer_shopee_uid = 7; // 只针admin backend
+     uint64 create_time = 8; // 只针对admin backend
+     uint64 update_time = 9; // 只针admin backend
+}
+
+message SetStaffInfoReq {
+    StaffInfo staff_info = 1; // staff_uid为0, 代表add, staff_uid不为0,代表edit
+    string payment_passcode = 2; // 店主支付密码(md5 then sha256)
+}
+
+message SetStaffInfoResp {
+    StaffInfo staff_info = 1; //目前只赋值staff_uid
+}
+
+message SetStaffStatusReq {
+    uint64 staff_uid = 1;
+    uint32 staff_status = 2; // 参考StaffStatus
+    string payment_passcode = 3; // 店主支付密码(md5 then sha256)
+}
+
+message SetStaffStatusResp {
+}
+
+message StaffLoginReq {
+    string staff_login_username = 1;
+    string staff_login_passcode = 2;  // 登录密码(md5 then sha256)
+    string device_fingerprint = 3;    // 设备码
+}
+
+message StaffLoginResp {
+    string access_token = 1;  // access token
+    string refresh_token = 2; // refresh token
+    uint64 access_token_expire_time = 3; // access token 过期时间戳，秒
+    uint64 refresh_token_expire_time = 4; // refresh token 过期时间戳，秒
+    uint64 uid = 5;           // uid
+}
+
+enum StaffStatus {
+    StaffStatus_UNKNOWN = 0;
+    StaffStatus_ACTIVE = 1;
+    StaffStatus_LOCK = 2;
+    StaffStatus_DELETE = 3;
+}
+
+message SendStaffLoginOTPReq {
+    string login_token = 1;
+    string device_fingerprint = 2;
+    bool is_voice_otp = 3;
+}
+
+message SendStaffLoginOTPResp {
+
+}
+
+message VerifyStaffLoginOTPReq {
+    string login_token = 1;
+    string device_fingerprint = 2;
+    string otp_code = 3;//用户输入的验证码
+}
+
+enum CardType {
+    CardType_UNKNOWN = 0;
+    CardType_IC_KTP = 1;// 身份证
+    CardType_IC_KITAS = 2;// 身份证
+    CardType_Passport = 3;// 护照
+    CardType_Driving = 4;// 驾照
+}
+message SyncKycToShopeepayReq {
+    uint64 flow_id = 1;
+}
+
+message SyncKycToShopeepayResp {
+}
+
+message GetShopeepaySyncLogListReq {
+    uint64 flow_id = 1; // 流水id
+    uint32 page = 2;    // 页数
+    uint32 page_size = 3;// 分页
+}
+
+message GetShopeepaySyncLogListResp {
+    message ShopeepaySyncLogRecord {
+        uint64 flow_id = 1;
+        string operator = 2;
+        uint64 operation_time = 3;
+        uint32 sync_status = 4;
+        string sync_errmsg = 5;// remark
+        string sync_debug_msg = 6;// shopee接口返回的debug msg数据
+    }
+    repeated ShopeepaySyncLogRecord record_list = 1; // 列表
+    uint32 total = 2;
+}
+
+enum KycVersion {
+  Kyc_Version_Unknown = 0; // 默认值
+  Kyc_Version_V1_Basic = 1;  // 个人基础信息
+  Kyc_Version_V2_Extra = 2;  // 个人基础信息+个人新增信息+Store信息+Bank信息
+  Kyc_Version_V3_ShopeePay_Sync = 3; // KYC信息添加个别字段,新增同步到ShopeePay逻辑
+}
+
+message ValidUidReq {
+  repeated uint64 uid = 1;
+}
+
+message ValidUidRes {
+  repeated uint64 invalidUid = 1;
+}
+
