@@ -1,2 +1,138 @@
-# github.com/pingcap/tidb v2.0.11+incompatible
+# github.com/HdrHistogram/hdrhistogram-go v0.9.0
+## explicit
+# github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d
+github.com/StackExchange/wmi
+# github.com/codahale/hdrhistogram v0.9.0
+## explicit
+# github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548
+github.com/cznic/mathutil
+# github.com/go-ole/go-ole v1.2.4
+github.com/go-ole/go-ole
+github.com/go-ole/go-ole/oleutil
+# github.com/golang/lint v0.0.0-20180702182130-06c8688daad7
+## explicit
+# github.com/golang/protobuf v1.3.4
+github.com/golang/protobuf/proto
+# github.com/golang/snappy v0.0.2-0.20190904063534-ff6b7dc882cf
+## explicit
+# github.com/google/go-cmp v0.5.2
+## explicit
+# github.com/gorilla/context v1.1.1
+## explicit
+# github.com/kr/text v0.2.0
+## explicit
+# github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e
+## explicit
+# github.com/onsi/ginkgo v1.11.0
+## explicit
+# github.com/onsi/gomega v1.8.1
+## explicit
+# github.com/pingcap/errors v0.11.5-0.20201126102027-b0a155152ca3
+## explicit
+github.com/pingcap/errors
+# github.com/pingcap/kvproto v0.0.0-20210125053538-4fb47d0584f2
+## explicit
+# github.com/pingcap/log v0.0.0-20201112100606-8f1e84a3abc8
+github.com/pingcap/log
+# github.com/pingcap/parser v3.1.2+incompatible
+## explicit
+github.com/pingcap/parser
+github.com/pingcap/parser/ast
+github.com/pingcap/parser/auth
+github.com/pingcap/parser/charset
+github.com/pingcap/parser/format
+github.com/pingcap/parser/model
+github.com/pingcap/parser/mysql
+github.com/pingcap/parser/opcode
+github.com/pingcap/parser/terror
+github.com/pingcap/parser/types
+# github.com/pingcap/tidb v1.1.0-beta.0.20210127100631-ddc14803a38a
+## explicit
+github.com/pingcap/tidb/sessionctx/stmtctx
+github.com/pingcap/tidb/types
+github.com/pingcap/tidb/types/json
+github.com/pingcap/tidb/types/parser_driver
+github.com/pingcap/tidb/util/execdetails
+github.com/pingcap/tidb/util/hack
+github.com/pingcap/tidb/util/logutil
+github.com/pingcap/tidb/util/math
+github.com/pingcap/tidb/util/memory
+github.com/pingcap/tidb/util/stringutil
+# github.com/pingcap/tidb-tools v4.0.9-0.20201127090955-2707c97b3853+incompatible
+## explicit
+# github.com/pingcap/tipb v0.0.0-20210201043841-ce9716c7e76d
+## explicit
+github.com/pingcap/tipb/go-tipb
+github.com/pingcap/tipb/sharedbytes
+# github.com/prometheus/client_golang v1.5.1
+## explicit
+# github.com/remyoudompheng/bigfft v0.0.0-20190728182440-6a916e37a237
+github.com/remyoudompheng/bigfft
+# github.com/shirou/gopsutil v2.20.6+incompatible
+## explicit
+github.com/shirou/gopsutil/internal/common
+github.com/shirou/gopsutil/mem
+# github.com/sirupsen/logrus v1.7.0
+## explicit
+github.com/sirupsen/logrus
+# github.com/stretchr/testify v1.6.1
+## explicit
+# github.com/struCoder/pidusage v0.1.2
+## explicit
+# github.com/syndtr/goleveldb v1.0.1-0.20190625010220-02440ea7a285
+## explicit
+# github.com/tikv/pd v1.1.0-beta.0.20201125070607-d4b90eee0c70
+## explicit
+# github.com/uber/jaeger-client-go v2.22.1+incompatible
+## explicit
+# github.com/uber/jaeger-lib v2.4.0+incompatible
+## explicit
+# go.etcd.io/etcd v0.5.0-alpha.5.0.20200824191128-ae9734ed278b
+## explicit
+# go.uber.org/atomic v1.7.0
+go.uber.org/atomic
+# go.uber.org/multierr v1.6.0
+## explicit
+go.uber.org/multierr
+# go.uber.org/zap v1.16.0
+## explicit
+go.uber.org/zap
+go.uber.org/zap/buffer
+go.uber.org/zap/internal/bufferpool
+go.uber.org/zap/internal/color
+go.uber.org/zap/internal/exit
+go.uber.org/zap/zapcore
+# golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
+## explicit
+# golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+# golang.org/x/text v0.3.5
+## explicit
+golang.org/x/text/encoding
+golang.org/x/text/encoding/charmap
+golang.org/x/text/encoding/internal
+golang.org/x/text/encoding/internal/identifier
+golang.org/x/text/encoding/japanese
+golang.org/x/text/encoding/korean
+golang.org/x/text/encoding/simplifiedchinese
+golang.org/x/text/encoding/traditionalchinese
+golang.org/x/text/encoding/unicode
+golang.org/x/text/internal/utf8internal
+golang.org/x/text/runes
+golang.org/x/text/transform
+# google.golang.org/grpc v1.27.1
+## explicit
+# gopkg.in/airbrake/gobrake.v2 v2.0.9
+## explicit
+# gopkg.in/check.v1 v1.0.0-20200902074654-038fdea0a05b
+## explicit
+# gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2
+## explicit
+# gopkg.in/natefinch/lumberjack.v2 v2.0.0
+gopkg.in/natefinch/lumberjack.v2
+# gopkg.in/yaml.v2 v2.3.0
+## explicit
+# honnef.co/go/tools v0.1.0
 ## explicit
